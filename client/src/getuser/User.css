@@ -1,0 +1,33 @@
+.user-table-container {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-top: 20px;
+}
+
+.user-table {
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.user-table th {
+  background: #343a40;
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+}
+
+.user-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.user-table tbody tr:hover {
+  background: #e9ecef;
+}
+
+.btn {
+  min-width: 70px;
+}
