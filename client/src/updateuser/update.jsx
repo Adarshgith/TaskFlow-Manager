@@ -14,6 +14,9 @@ const Updateuser = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // to set the id from url
 
+  // Get API URL from environment variable or use fallback
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
   const inputHandler = (e) => {
     const { name, value } = e.target;
     console.log(name, value); // it will take name and value from input field
@@ -22,23 +25,29 @@ const Updateuser = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/users/${id}`)
+      .get(`${API_URL}/api/users/${id}`)
       .then((res) => {
         setUser(res.data);
       })
-      .catch((err) => console.log(err));
-  }, [id]);
+      .catch((err) => {
+        console.log(err);
+        toast.error("Error fetching user data", { position: "top-right" });
+      });
+  }, [id, API_URL]);
 
   const submitForm = async (e) => {
     e.preventDefault();
     await axios
-      .put(`http://localhost:8000/api/users/${id}`, user)
+      .put(`${API_URL}/api/users/${id}`, user)
       .then((res) => {
         console.log(res);
         toast.success(res.data.message, { position: "top-right" });
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response?.data?.message || "Error updating user", { position: "top-right" });
+      });
   };
 
   return (
@@ -83,7 +92,7 @@ const Updateuser = () => {
             />
           </div>
           <button type="submit" className="adduser-btn">
-            Add User
+            Update User
           </button>
         </form>
       </div>

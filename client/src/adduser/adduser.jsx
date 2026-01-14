@@ -13,6 +13,8 @@ const Adduser = () => {
     const [user,setUser]=useState(users);
     const navigate=useNavigate();
 
+    // Get API URL from environment variable or use fallback
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
     const inputHandler=(e)=>{
         const {name,value}=e.target;
@@ -22,13 +24,16 @@ const Adduser = () => {
 
     const submitForm= async(e)=>{
         e.preventDefault();
-        await axios.post("http://localhost:8000/api/users/",user )
+        await axios.post(`${API_URL}/api/users/`, user)
         .then((res)=>{
             console.log(res);
             toast.success(res.data.message, {position:"top-right"});
             navigate("/");
         })
-        .catch((err)=>console.log(err));    
+        .catch((err)=>{
+            console.log(err);
+            toast.error(err.response?.data?.message || "Error adding user", {position:"top-right"});
+        });    
     }
 
   return (

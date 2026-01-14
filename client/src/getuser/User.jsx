@@ -7,23 +7,27 @@ import toast from "react-hot-toast";
 const User = () => {
   const [users, setUsers] = useState([]);
 
+  // Get API URL from environment variable or use fallback
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/users/");
+        const response = await fetch(`${API_URL}/api/users/`);
         const data = await response.json();
         setUsers(data);
       } catch (error) {
         console.error("Error fetching users:", error);
+        toast.error("Error fetching users", { position: "top-right" });
       }
     };
     fetchData();
-  }, []);
+  }, [API_URL]);
 
   const deleteUser = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8000/api/users/${id}`
+        `${API_URL}/api/users/${id}`
       );
       setUsers(users.filter((user) => user._id !== id));
       toast.success(response.data.message, { position: "top-right" });
@@ -51,7 +55,7 @@ const User = () => {
         <tbody>
           {users.map((user, index) => {
             return (
-              <tr>
+              <tr key={user._id}>
                 <td>{index + 1}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
